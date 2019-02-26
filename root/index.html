@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="css/style.css"> 
+    <title>Sun Dog Experience</title>
+    
+</head>
+<body>   
+    <script src="js/three.js"></script>
+    <script src="js/OrbitControls.js"></script>
+    <script>
+                
+        
+        // set scene camera and renderer
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+        var controls = new THREE.OrbitControls( camera, render.documentElement );
+    
+        var renderer = new THREE.WebGLRenderer( );
+//        
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        document.body.appendChild( renderer.domElement );
+        renderer.domElement.id = 'canvas';
+        
+        
+        
+        // update viewport on resize
+        window.addEventListener( 'resize', function(){
+            var width = window.innerWidth;
+            var height = window.innerHeight;
+            renderer.setSize( width, height );
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+        } );
+        // lights
+        var light =  new THREE.HemisphereLight( 0xffffbb, 0x080820, 1 );
+        light.position.set( 9, 2, 9 ).normalize();
+        scene.add(light);    
+        
+    
+        var geometry = new THREE.DodecahedronBufferGeometry( 7, 2 );
+        var material = new THREE.MeshPhysicalMaterial( { color: 0xedc810, wireframe: true, wireframeLinewidth: 10 } );
+        var cage = new THREE.Mesh( geometry, material );    
+            
+        scene.add( cage );
+        
+        
+        var geometry2 = new THREE.SphereBufferGeometry( 5, 32, 32 );
+        var material2 = new THREE.MeshPhysicalMaterial( { color: 0xbcd6ce, wireframe: false } );
+        var yolk = new THREE.Mesh( geometry2, material2 );    
+            
+        scene.add( yolk );     
+        
+        camera.position.z = 15;
+        
+        
+        var curve = new THREE.EllipseCurve( 0,  0, 10, 10, 0,  2 * Math.PI, false, 0 );
+
+        var points = curve.getPoints( 50 );
+        var geometry2 = new THREE.BufferGeometry().setFromPoints( points );
+
+        var material2 = new THREE.LineBasicMaterial( { color : 0xa07e3b, linewidth: 4} );
+
+        // Create the final object to add to the scene
+        var ellipse = new THREE.Line( geometry2, material2 ); 
+        scene.add( ellipse );
+        
+        renderer.setClearColor( 0xffffff );
+               
+      
+        
+        function update(){
+            
+      
+            cage.rotation.y +=  0.0009;
+            cage.rotation.x +=  0.0009;  
+            
+        }
+        
+        
+
+        // draw the scene
+        function render(){
+            renderer.render( scene, camera );
+            
+        }
+        
+        // run animations
+        function animate (){
+            requestAnimationFrame( animate );
+            
+            update();
+            render();
+            
+            
+        }
+        
+        animate();
+        
+    </script>
+
+    <script src="js/particles.js"></script>
+    <script src="js/app.js"></script> 
+
+</body>
+</html>
